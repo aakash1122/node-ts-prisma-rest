@@ -1,7 +1,7 @@
 import prisma from "../client/prismaClient";
-import { postDto } from "interfaces/dto/PostDto";
+import { creatPostDto } from "interfaces/dto/PostDto";
 
-const create = async (PostToCreate: postDto) => {
+const create = async (PostToCreate: creatPostDto) => {
   const resp = await prisma.post.create({
     data: PostToCreate,
   });
