@@ -1,7 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 
+const isDebugEnabled = process.env.DEBUG;
+
 const prisma = new PrismaClient({
-  log: ["query", "info", "warn", "error"],
+  log: isDebugEnabled === "true" ? ["query", "info", "warn", "error"] : [],
   errorFormat: "pretty",
 });
 
