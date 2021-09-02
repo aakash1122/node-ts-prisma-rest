@@ -5,36 +5,18 @@ import faker from "faker";
 const numOfData = Array(100).fill("_");
 
 export async function seed() {
-  // numOfData.forEach(async () => {
-  // await prisma.user.create({
-  //   data: {
-  //     email: faker.internet.email().toLowerCase(),
-  //     fullName: faker.name.findName(),
-  //     password: await bcrypt.hash("aakash", 10),
-  //     posts: {
-  //       create: {
-  //         title: faker.lorem.word(8),
-  //         content: faker.lorem.word(500),
-  //       },
-  //     },
-  //   },
-  // });
-  // });
-
-  const ids = await prisma.post.findMany({
-    select: {
-      id: true,
-    },
-  });
-
-  ids.map(async (data) => {
-    await prisma.post.update({
+  numOfData.forEach(async () => {
+    await prisma.user.create({
       data: {
-        title: faker.lorem.words(20),
-        content: faker.lorem.words(300),
-      },
-      where: {
-        id: data.id,
+        email: faker.internet.email().toLowerCase(),
+        fullName: faker.name.findName(),
+        password: await bcrypt.hash("aakash", 10),
+        posts: {
+          create: {
+            title: faker.lorem.words(20),
+            content: faker.lorem.words(300),
+          },
+        },
       },
     });
   });

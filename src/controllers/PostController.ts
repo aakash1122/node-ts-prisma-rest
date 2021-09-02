@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import PostService from "../services/PostServices";
 import prisma from "../client/prismaClient";
 import Joi from "joi";
+import paginator from "../utils/paginator";
 
 const createPostSchema = Joi.object({
   title: Joi.string().min(20).required(),
@@ -21,7 +22,6 @@ const options = {
 const createPost = async (req: Request, res: Response) => {
   try {
     const { error, value } = createPostSchema.validate(req.body, options);
-    console.log(error, value);
 
     if (error) {
       return res.status(400).json({
@@ -41,14 +41,9 @@ const getAllPosts = async (req: Request, res: Response) => {
   try {
     const options = req.query;
 
-    console.log(options);
-
     let numOfResults = await prisma.post.count({});
     let page: number = Number(options.page) || 1;
     let itemsPerPage: number = Number(options?.perPage || 25);
-    let numOfPages: number;
-
-    numOfPages = Math.ceil(numOfResults / itemsPerPage);
 
     console.log(page, itemsPerPage);
 
@@ -57,18 +52,24 @@ const getAllPosts = async (req: Request, res: Response) => {
       take: itemsPerPage,
     });
 
+    const paginOption = paginator({
+      currentPage: Number(options?.page) || 1,
+      itemsPerPage: Number(options?.itemsPerPage || 25),
+      numOfResults: numOfResults,
+    });
+
     const allPosts = await prisma.post.findMany({
-      skip: (page > 1 ? page - 1 : 0) * itemsPerPage,
+      skip: paginOption.offset,
       take: itemsPerPage,
     });
 
     return res.status(200).json({
-      totalPages: numOfPages,
+      totalPages: paginOption.numOfPages,
       currentPage: page,
-      hasMoreItems: page < numOfPages,
+      hasMoreItems: paginOption.hasMore,
       totalRetured: allPosts.length,
-      data: allPosts,
       totalPosts: numOfResults,
+      data: allPosts,
     });
   } catch (error) {
     console.log(error);

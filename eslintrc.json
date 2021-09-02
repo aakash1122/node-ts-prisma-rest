@@ -13,7 +13,6 @@
         "plugin:prettier/recommended"
       ],
       "rules": {
-        "no-console": "warn",
         "max-len": "off",
         "no-underscore-dangle": "off",
         "arrow-body-style": "off",
