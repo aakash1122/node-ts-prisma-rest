@@ -1,10 +1,10 @@
-import { Prisma } from "@prisma/client";
-import { formatJoiError } from "./../utils/formatJoiError";
-import { Request, Response } from "express";
-import PostService from "../services/PostServices";
-import prisma from "../client/prismaClient";
+import { BadRequest, NotFound } from "../Error/index";
+import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
+import prisma from "../client/prismaClient";
+import PostService from "../services/PostServices";
 import paginator from "../utils/paginator";
+import { formatJoiError } from "./../utils/formatJoiError";
 
 const createPostSchema = Joi.object({
   title: Joi.string().min(20).required(),
@@ -79,6 +79,16 @@ const getAllPosts = async (req: Request, res: Response) => {
   }
 };
 
-const getPostById = async () => {};
+const getPostById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const post = await PostService.findById(req.query.id as string);
+
+    if (!post) {
+      throw new NotFound(`Post is not found by id ${req.query.id}`);
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
 
 export { getAllPosts, getPostById, createPost };

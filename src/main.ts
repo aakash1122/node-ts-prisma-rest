@@ -1,7 +1,8 @@
+import { errorHandler } from "./middleware/errorHandler";
 import cors from "cors";
-import express, { Express } from "express";
+import express, { Express, Request, Response, NextFunction } from "express";
 import postRoutes from "./routes/PostRoutes";
-import { errorLogger, infoLogger } from "./logger/index";
+import userRoutes from "./routes/UserRoutes";
 
 const app: Express = express();
 const PORT = process.env.PORT || 5000;
@@ -15,9 +16,13 @@ app.use(express.urlencoded({ extended: true }));
 
 // this must come after the winston config and before error logger
 app.use("/posts", postRoutes);
+app.use("/users", userRoutes);
 
 // express-winston errorLogger makes sense AFTER the router.
 // app.use(errorLogger());
+
+// Error Handler
+app.use(errorHandler);
 
 app.listen(PORT, () =>
   console.log("🔥 server is running at PORT : ", PORT, "🔥")

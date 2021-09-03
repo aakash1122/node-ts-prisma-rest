@@ -8,6 +8,16 @@ const create = async (PostToCreate: creatPostDto) => {
   return resp;
 };
 
+const findById = async (id: string) => {
+  const resp = await prisma.post.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return resp;
+};
+
 export default {
   create,
+  findById,
 };
