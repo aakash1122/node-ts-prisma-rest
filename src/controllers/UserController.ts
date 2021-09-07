@@ -32,7 +32,6 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
         error: formatJoiError(error),
       });
     }
-
     /*
      * check if user email already exist
      */
@@ -56,7 +55,6 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     return res.status(201).json({ data: response });
   } catch (error) {
     next(error);
-    console.log(error);
   }
 };
 
