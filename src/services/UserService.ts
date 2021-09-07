@@ -1,12 +1,7 @@
+import { Prisma } from "@prisma/client";
 import prisma from "../client/prismaClient";
 
-interface userDto {
-  fullName: string;
-  email: string;
-  password: string;
-}
-
-const create = async (userToCreate: userDto) => {
+const create = async (userToCreate: Prisma.UserCreateInput) => {
   return await prisma.user.create({
     data: userToCreate,
   });

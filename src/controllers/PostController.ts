@@ -1,7 +1,7 @@
-import { BadRequest, NotFound } from "../Error/index";
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import prisma from "../client/prismaClient";
+import { NotFound } from "../Error/index";
 import PostService from "../services/PostServices";
 import paginator from "../utils/paginator";
 import { formatJoiError } from "./../utils/formatJoiError";
@@ -19,6 +19,8 @@ const options = {
   stripUnknown: true, // remove unknown props
 };
 
+const postService = new PostService();
+
 const createPost = async (req: Request, res: Response) => {
   try {
     const { error, value } = createPostSchema.validate(req.body, options);
@@ -29,7 +31,7 @@ const createPost = async (req: Request, res: Response) => {
       });
     }
 
-    const createdPost = await PostService.create(value);
+    const createdPost = await postService.create(value);
     return res.status(200).json({ data: createdPost });
   } catch (e: any) {
     console.log(e);
@@ -44,13 +46,6 @@ const getAllPosts = async (req: Request, res: Response) => {
     let numOfResults = await prisma.post.count({});
     let page: number = Number(options.page) || 1;
     let itemsPerPage: number = Number(options?.perPage || 25);
-
-    console.log(page, itemsPerPage);
-
-    console.log({
-      skip: (page > 1 ? page : 0) * itemsPerPage,
-      take: itemsPerPage,
-    });
 
     const paginOption = paginator({
       currentPage: Number(options?.page) || 1,
@@ -81,7 +76,7 @@ const getAllPosts = async (req: Request, res: Response) => {
 
 const getPostById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const post = await PostService.findById(req.query.id as string);
+    const post = await postService.findById(req.query.id as string);
 
     if (!post) {
       throw new NotFound(`Post is not found by id ${req.query.id}`);
