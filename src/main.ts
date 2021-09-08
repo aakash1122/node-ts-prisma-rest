@@ -3,6 +3,8 @@ import cors from "cors";
 import express, { Express, Request, Response, NextFunction } from "express";
 import postRoutes from "./routes/PostRoutes";
 import userRoutes from "./routes/UserRoutes";
+import expressListRoutes from "express-list-routes";
+const listEndpoints = require("express-list-endpoints");
 
 const app: Express = express();
 const PORT = process.env.PORT || 5000;
@@ -27,3 +29,11 @@ app.use(errorHandler);
 app.listen(PORT, () =>
   console.log("🔥 server is running at PORT : ", PORT, "🔥")
 );
+
+// log routes
+(function logRoutes() {
+  console.log("--------------------------------------------");
+  expressListRoutes(app, { prefix: "/", spacer: 10 });
+  console.log(listEndpoints(app));
+  console.log("--------------------------------------------");
+})();
