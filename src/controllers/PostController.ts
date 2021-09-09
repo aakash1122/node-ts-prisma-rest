@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response } from "express";
-import Joi from "joi";
-import prisma from "../client/prismaClient";
-import { NotFound } from "../Error/index";
-import PostService from "../services/PostServices";
-import paginator from "../utils/paginator";
-import { formatJoiError } from "./../utils/formatJoiError";
+import { NextFunction, Request, Response } from 'express';
+import Joi from 'joi';
+import prisma from '../client/prismaClient';
+import { NotFound } from '../Error/index';
+import PostService from '../services/PostServices';
+import paginator from '../utils/paginator';
+import { formatJoiError } from './../utils/formatJoiError';
 
 const createPostSchema = Joi.object({
   title: Joi.string().min(20).required(),
@@ -69,7 +69,7 @@ const getAllPosts = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: "something went wrong",
+      message: 'something went wrong',
     });
   }
 };

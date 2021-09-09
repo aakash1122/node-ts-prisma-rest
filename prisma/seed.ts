@@ -1,8 +1,8 @@
-import prisma from "../src/client/prismaClient";
-import bcrypt from "bcrypt";
-import faker from "faker";
+import prisma from '../src/client/prismaClient';
+import bcrypt from 'bcrypt';
+import faker from 'faker';
 
-const numOfData = Array(100).fill("_");
+const numOfData = Array(100).fill('_');
 
 export async function seed() {
   numOfData.forEach(async () => {
@@ -10,7 +10,7 @@ export async function seed() {
       data: {
         email: faker.internet.email().toLowerCase(),
         fullName: faker.name.findName(),
-        password: await bcrypt.hash("aakash", 10),
+        password: await bcrypt.hash('aakash', 10),
         posts: {
           create: {
             title: faker.lorem.words(20),

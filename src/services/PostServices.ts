@@ -1,5 +1,5 @@
-import prisma from "../client/prismaClient";
-import { creatPostDto } from "interfaces/dto/PostDto";
+import prisma from '../client/prismaClient';
+import { creatPostDto } from 'interfaces/dto/PostDto';
 
 class PostService {
   async create(PostToCreate: creatPostDto) {

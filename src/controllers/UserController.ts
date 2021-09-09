@@ -1,8 +1,8 @@
-import Joi from "joi";
-import { NextFunction, Request, Response } from "express";
-import UserService from "../services/UserService";
-import { formatJoiError } from "../utils/formatJoiError";
-import bcrypt from "bcrypt";
+import Joi from 'joi';
+import { NextFunction, Request, Response } from 'express';
+import UserService from '../services/UserService';
+import { formatJoiError } from '../utils/formatJoiError';
+import bcrypt from 'bcrypt';
 
 const createUserSchema = Joi.object({
   email: Joi.string().email().required().lowercase(),
@@ -38,7 +38,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     const userExist = await UserService.UserByEmail(value?.email);
     if (userExist)
       return res.status(420).json({
-        message: "Email already exists",
+        message: 'Email already exists',
       });
 
     /*
@@ -62,12 +62,12 @@ const getAllUser = async (req: Request, res: Response) => {
   try {
     const users = await UserService.users();
     return res.status(200).json({
-      status: "success",
+      status: 'success',
       data: users,
     });
   } catch (error) {
     return res.status(500).json({
-      message: "something went wrong while fetching the data",
+      message: 'something went wrong while fetching the data',
     });
   }
 };
