@@ -4,35 +4,12 @@ import UserService from '../services/UserService';
 import { formatJoiError } from '../utils/formatJoiError';
 import bcrypt from 'bcrypt';
 import { BaseError } from '../Error/index';
-
-const createUserSchema = Joi.object({
-  email: Joi.string().email().required().lowercase(),
-  fullName: Joi.string().required(),
-  password: Joi.string()
-    .pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
-    .required(),
-});
-
-const options = {
-  abortEarly: false, // include all errors
-  allowUnknown: true, // ignore unknown props
-  stripUnknown: true, // remove unknown props
-};
+import { validator } from '../utils/validator';
+import { createUserSchema } from '../utils/validateSchema';
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { value, error, warning } = createUserSchema.validate(
-      req.body,
-      options
-    );
-    /*
-     * validation error response
-     */
-    if (error) {
-      return res.status(400).json({
-        error: formatJoiError(error),
-      });
-    }
+    const value = req.body;
     /*
      * check if user email already exist
      */

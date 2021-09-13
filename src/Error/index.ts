@@ -28,4 +28,14 @@ class BadRequest extends BaseError {
   }
 }
 
-export { BaseError, NotFound, BadRequest };
+class SuperBad extends BaseError {
+  constructor(msg: string) {
+    super(msg);
+    this.message = msg;
+  }
+  getCode() {
+    return 420;
+  }
+}
+
+export { BaseError, NotFound, BadRequest, SuperBad };
