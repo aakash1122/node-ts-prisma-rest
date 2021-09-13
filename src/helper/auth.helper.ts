@@ -15,8 +15,6 @@ const checkToken = async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(401).json('invalid token');
   }
-
-  res.json('token okay');
 };
 
 const extractAuthHeader = (req: Request) => {

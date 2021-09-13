@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import UserService from '../services/UserService';
 import { formatJoiError } from '../utils/formatJoiError';
 import bcrypt from 'bcrypt';
+import { BaseError } from '../Error/index';
 
 const createUserSchema = Joi.object({
   email: Joi.string().email().required().lowercase(),
@@ -36,11 +37,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
      * check if user email already exist
      */
     const userExist = await UserService.UserByEmail(value?.email);
-    if (userExist)
-      return res.status(420).json({
-        message: 'Email already exists',
-      });
-
+    if (userExist) throw new BaseError('user already exist with this email');
     /*
      * create user
      */

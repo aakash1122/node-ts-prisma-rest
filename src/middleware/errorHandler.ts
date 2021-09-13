@@ -12,9 +12,8 @@ export const errorHandler = (
     code = err.getCode();
   }
 
-  console.log(code);
-
   return res.status(code).json({
+    correlationId: req.headers['x-correlation-id'],
     message: err?.message,
   });
 };

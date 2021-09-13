@@ -9,6 +9,8 @@ interface AuthMethods {
 }
 
 class AuthController implements AuthMethods {
+  private ATSecret = process.env.ACCESS_TOKEN_SECRET || '';
+
   async login(req: Request, res: Response) {
     const ATSecret = process.env.ACCESS_TOKEN_SECRET || '';
     let data: LoginResponse = {
@@ -21,7 +23,7 @@ class AuthController implements AuthMethods {
         },
         ATSecret,
         {
-          expiresIn: '30s',
+          expiresIn: '30m',
         }
       ),
       refreshToken: 'dfasdfasfdsf',
